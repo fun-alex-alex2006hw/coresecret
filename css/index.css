@@ -1,0 +1,138 @@
+
+/* Index: main text section */
+.index-main-section {
+  margin-top: 50px;
+}
+
+.index-main-section > p {
+  color: rgb(153, 153, 153);
+  padding-left: 10px;
+}
+
+.index-main-section > p > span {
+  display: block;
+}
+
+.index-main-btn {
+  margin-top: 25px;
+  padding-left: 10px;
+}
+
+.index-main-appstore-1 {
+  margin: 0 0 80px 0;
+  padding: 0;
+  text-align: center;
+}
+
+.index-main-appstore-2 {
+  display: none;
+}
+
+
+@media screen and (max-width: 992px) {
+  .jumbotron h1 {
+    font-size: 48px;
+  }
+
+  .index-main-section {
+    margin-top: 90px;
+  }
+
+  .index-main-section > p > span {
+    display: inline;
+  }
+
+  .index-iphone-pic {
+    padding: 0;
+    margin: 0;
+  }
+
+  .index-main-appstore-1 {
+    display: none;
+  }
+
+  .index-main-appstore-2 {
+    display: block;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .jumbotron h1 {
+    font-size: 46px;
+  }
+
+  .index-main-section {
+    margin-top: 0px;
+    text-align: center;
+    padding: 0;
+  }
+
+  .index-main-appstore-1 {
+    display: block;
+    margin-bottom: 40px;
+    padding: 0;
+  }
+
+  .index-main-appstore-2 {
+    display: none;
+  }
+}
+
+
+/* Carousel overridings */
+.carousel-indicators {
+  bottom: 10px;
+}
+
+.carousel-indicators li {
+  border: 1px solid transparent;
+  background-color: rgb(1, 122, 255);
+}
+
+.carousel-indicators .active {
+  background-color: transparent;
+  border: 1px solid rgb(1, 122, 255);
+}
+
+
+.carousel-iphone-container {
+  margin-top: 0px;
+  height: 735px;
+  background-image: url('../images/iphone_5s.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.carousel-iphone {
+  margin: 112px 22px 80px 18px;*/ /* iphone 5s */
+}
+
+@media screen and (max-width: 992px) {
+  .carousel-indicators {
+    bottom: 5px;
+  }
+
+  .carousel-iphone-container {
+    width: 350px;
+  }
+
+  .carousel-iphone {
+    margin: 112px 22px 80px 18px; /* iphone 5s */
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .carousel-indicators {
+    bottom: 0px;
+  }
+
+  .carousel-iphone-container {
+    width: 280px;
+    margin-top: 30px;
+  }
+
+  .carousel-iphone {
+    margin: 91px 15px 80px 12px; /* iphone 5s */
+  }
+}

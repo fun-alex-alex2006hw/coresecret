@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Core Secret - Documentation</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/index.en.html" class="navbar-brand">Core Secret</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="tutorial.en.html">Tutorial</a>
+            </li>
+            <li class="active">
+              <a href="documentation.en.html">Documentation</a>
+            </li>
+            <li>
+              <a href="faq.en.html">FAQ</a>
+            </li>
+            <li>
+              <a href="contact.en.html">Contact</a>
+            </li>
+	    <li>
+              <a href="documentation.fr.html">French <img src="images/fr.png" width="15" class="flag" alt="flag" /></a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+
+    <div class="container bs-docs-container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="bs-sidebar hidden-print" role="complementary">
+            <ul class="nav bs-sidenav">
+             <li>
+	       <a href="#overview">Overview</a>
+	       <ul class="nav">
+		 <li><a href="#overview-principle">Principle</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#peers">Manage peers</a>
+	       <ul class="nav">
+		 <li><a href="#peers-add">Peers authentication</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#secret-sharing">Secret sharing</a>
+	       <ul class="nav">
+		 <li><a href="#secret-sharing-btle">Secret sharing with Bluetooth 4.0</a></li>
+		 <li><a href="#secret-sharing-recover-btle">Secret recovering</a></li>
+		 <li><a href="#secret-sharing-password">Password protection</a></li>
+		 <li><a href="#secret-sharing-reshare-btle">Secret resharing</a></li>
+		 <li><a href="#secret-sharing-backup">Restoring secrets</a></li>
+		 <li><a href="#secret-sharing-pasteboard">Pasteboard & temporary files</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#group">Shared encryption key</a>
+	       <ul class="nav">
+		 <li><a href="#group-create">Create a shared encryption key</a></li>
+		 <li><a href="#group-add">Adding encrypted items</a></li>
+		 <li><a href="#group-airdrop">Airdrop sharing</a></li>
+		 <li><a href="#group-qr">QR code sharing</a></li>
+		 <li><a href="#group-rebind">Duplicating a secret</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#settings">Settings</a>
+	       <ul class="nav">
+		 <li><a href="#settings-btle">Managing Bluetooth 4.0 services</a></li>
+		 <li><a href="#settings-ssconfirmation">Confirm secret sharing</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#crypto">Crypto</a>
+	       <ul class="nav">
+	       </ul>
+	     </li>
+	     <!--
+	     <li>
+	       <a href="#protocol">Protocol</a>
+	       <ul class="nav">
+		 <li><a href="#"></a></li>
+		 <li><a href="#"></a></li>
+		 <li><a href="#"></a></li>
+		 <li><a href="#"></a></li>
+	       </ul>
+	     </li>
+	     -->
+	     <li>
+	       <a href="#api">API interface</a>
+	       <ul class="nav">
+		 <li><a href="#api-scheme">URL scheme</a></li>
+		 <li><a href="#api-encrypt">Encryption request</a></li>
+		 <li><a href="#api-decrypt">Decryption request</a></li>
+	       </ul>
+	     </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-9 docs-main" role="main">
+	  <!--
+	  <div class="container text-center cs-doc-icon">
+	    <a href="index.en.html"><img src="images/coresecret-1024.png" width="130"></a>
+	  </div>
+	  -->
+	  <div class="page-header">
+	    <h1 id="overview">Overview</h1>
+	  </div>
+	  <p class="lead">With Core Secret split a secret in multiples shares and require the possession of a subset of these shares in order to reassemble the secret.</p>
+
+	  <h3 id="overview-principle">Principle</h3>
+	  <p>Each secret is divided in a given number of shares along with a fixed threshold value requiring the possession of a  minimal number of shares in order to recover the secret value. Concretely one person may share and distribute a secret with several peers, each one of these peers will later be able to recover the initial secret by using its own share and by requesting additional shares to other peers until reaching the required threshold for successfully recovering the secret. Core Secret implements the <a href="http://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir's secret sharing scheme</a>.</p>
+
+
+
+	  <div class="page-header">
+	    <h1 id="peers">Manage peers</h1>
+	  </div>
+
+	  <h3 id="peers-add">Peers authentication</h3>
+	  <p>The first step before sharing a secret or being able to receive a secret share is to authenticate its trusted peers. It is a necessary step because the exchanges leading to the share of a secret will only be authorized with authenticated peers. A peer's public key must be imported in order to consider this peer as authenticated. Conversely, a device will also be required to make peers import its own public key before sharing a secret with them. In Core Secret a public key is represented as a QR code and must be scanned by a peer if it wants to import it. The following example shows Alice importing John's public key.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/alice1.png" class="thumbnail">
+		    <img src="images/en/alice1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>This table presents Alice's public key and list all Alice's authenticated peers (none so far).</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/alice2.jpg" class="thumbnail">
+		    <img src="images/en/alice2.jpg" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>A QR code representing John's public key is scanned by Alice and added to her list of authenticated peers.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/alice3.png" class="thumbnail">
+		    <img src="images/en/alice3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>John's key is now listed as an authenticated peer.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/alice4.png" class="thumbnail">
+		    <img src="images/en/alice4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Alice's public key. A peer may authenticate Alice simply by scanning and importing this public key.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/alice5.png" class="thumbnail">
+		    <img src="images/en/alice5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Various representations of Alice's public key.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+
+	  <div class="page-header">
+	    <h1 id="secret-sharing">Secret sharing</h1>
+	  </div>
+	  <p class="lead">Core Secret implements two main features. The first one enables sharing secrets of limited sizes with peers by using Bluetooth Low Energy; whereas the second one will be useful to create and share larger secrets using asynchronous methods.</p>
+
+	  <h3 id="secret-sharing-btle">Secret sharing with Bluetooth 4.0</h3>
+	  <p>The purpose of this feature is to share secrets with different peers. For instance the sharer also called the initiator may choose to share a secret file or a secret note with peers selected among his list of trusted authenticated peers.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/share1.png" class="thumbnail">
+		    <img src="images/en/share1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>A <strong>Note</strong> is selected as secret type. The <strong>description</strong> field represents an optional public description used as metadata for the secret if provided. As it is <strong>not encrypted</strong> this description must not contain sensitive informations. The description is transmitted with the secret when the share is sent to a peer.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/share2.png" class="thumbnail">
+		    <img src="images/en/share2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>The secret note is edited.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/share3.png" class="thumbnail">
+		    <img src="images/en/share3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Share</strong> menu. The <strong>threshold value</strong> represents the number of shares that must be collected before a secret can be recovered. <strong>Shares labels</strong> are the names of peers public keys used to encrypt distributed shares, this metadata is also <strong>not encrypted</strong>. Listed <strong>peers</strong> are currently Bluetooth 4.0 connected peers running Core Secret. A closed lock icon means peer's public key is authenticated.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/share4.png" class="thumbnail">
+		    <img src="images/en/share4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Peers with which the secret must be shared are selected (in this case only John). Sharing immediately starts when <strong>Share</strong> is taped. Shares are then sent to all selected peers. If a peer encounters an error it is possible to resend its share by re-taping the same button.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/share5.png" class="thumbnail">
+		    <img src="images/en/share5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Sharing finished.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>In this case all communications between the initiator and its peers use Bluetooth 4.0 (<a href="faq.en.html#compat-devices">see the FAQ</a> to see the list of current Bluetooth 4.0 compatibles devices). Bluetooth 4.0 being not a technology intended for transferring large quantity of data the tranferts are then limited in this mode. The limit size is currently arbitrarily fixed to 100 kB (note that this limitation might change as the implementations improve and observed throughputs increase).</p>
+
+	  <p>These are the currently implemented pre-defined secrets templates:</p>
+	  <ul>
+	    <li>Note</li>
+	    <li>File (whose size is limited to 100 kB)</li>
+	    <li>Password</li>
+	    <li>Contact</li>
+	    <li>Encryption key (see next sections for more details)</li>
+	  </ul>
+
+	  <h4>Remark on shares labels:</h4>
+	  <p>During the previous secret sharing, the option <em>Include labels</em> was enabled. This option sends unencrypted (in the clear) with each secret share a list of all public keys labels of the peers with whom the secret is shared. These informations can be useful at recovery to know which peer has a share of the secret to recover. However if it appears that these labels disclose too much sensitive informations it is possible by disabling this option to not send any label.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/en/secret-infos.png" class="thumbnail">
+		    <img src="images/en/secret-infos.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Before attempting to recover a secret it is possible to view some metadata of the secret. In particular if the option <em>Include labels</em> was enabled during secret sharing then labels should be available and displayed.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="secret-sharing-recover-btle">Secret recovering</h3>
+	  <p>Once secret sharing's done, not only each peer owns a share of the secret key used to encrypt the secret but it also has a share of the ciphertext. That is after the secret message is encrypted with the secret key its result is also divided in shares and each peer is assigned one share of the ciphertext. Therefore at any given time any peer only have one share of the secret and one share of the ciphertext stored in its device, none of them store the full ciphertext on its system. Anytime a peer wants to recover the plaintext message it has to gather secret shares and ciphertext shares, knowing that this number of shares is determined by the threshold value fixed before the secret was shared. Because requests for gathering shares from peers are also made in Bluetooth 4.0, only peers at proximity can be queried.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/recover1.png" class="thumbnail">
+		    <img src="images/en/recover1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Automatic <strong>recovering</strong> of the secret. When a secret is selected for recovering, Alice's device automatically scans for peers at proximity possessing a share of the secret, then automatically connects to them and ask for their shares.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/recover2.png" class="thumbnail">
+		    <img src="images/en/recover2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Secret message's view once the secret's recovered and the note decrypted.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>If the threshold value is not reached the secret can not be recovered. If one or more peers delete their shares the secret may become definitively unrecoverable and is lost. A share is automatically obtained from a peer if the peer requesting it is authenticated (by its public key) on this peer and if it provides a valid proof that it also holds a valid share of the secret itself. This procedure doesn't require any further authorization step from the peer. After the initial sharing the initiator like any of its peers only keeps a share of the secret and therefore will also need to query for shares when it seeks to recover the secret. Once recovered a secret is available as long as the application remains active (i.e. device not locked or in sleep mode, application not in background) and as long as the current menu is not popped/exited.</p>
+
+
+	  <h3 id="secret-sharing-password">Password protection</h3>
+	  <p>Added to the threshold secret sharing introduced before it is also possible to add another layer of security by adding a password for protecting the secret. With this additional protection when a device successfully recovers a secret and decrypts its ciphertext a password is then asked to fully decrypt the secret. Therefore in this setting the initial plaintext is encrypted two times, one time with the shared secret and then a second time with a secret key directly derived from the user provided password.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/scrypt1.png" class="thumbnail">
+		    <img src="images/en/scrypt1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Add password</strong>'s option is enabled. The choice between two <em>N</em> values is presented. This value is provided as input to the underlying password key derivation algorithm used (see <a href="#crypto">crypto section</a> for more details). In short, more this value is large more the password key derivation process is resource intensive which therefore usually adds stronger security. Of course as side effect, a larger value will require more time in order to derive its key.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/scrypt1.png" class="thumbnail">
+		    <img src="images/en/scrypt2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>A password is typed.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="secret-sharing-reshare-btle">Secret resharing</h3>
+	  <p>Once secret shares are distributed the original secret message can not be edited anymore and new peers can not be added to the list of peers for this secret. Nevertheless it is possible to modify the original secret or share it with new peers simply by resharing a copy of the secret. Core Secret provides an easy way to reshare any given secret, it just requires to first recover the secret then to choose the reshare option in the proposed list of actions:</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/en/reshare1.png" class="thumbnail">
+		    <img src="images/en/reshare1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Tap <strong>Reshare</strong> to reencrypt a copy of this secret to new peers. <strong>Warning</strong> all others options presented in this menu are <strong>unencrypted</strong> alternative ways of sharing this secret, i.e. in these cases the secret is simply sent as plaintext.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>This resharing functionality can be useful for saving a secret by assigning it to new devices.</p>
+
+
+	  <h3 id="secret-sharing-backup">Restoring secrets</h3>
+	  <p>A secret share is intimately tied with the device on which it was created or first received, therefore it is not possible to restore the same secret share on a different device after the restoration of a backup, i.e. it is not possible to backup Core Secret from a device through iTunes and then restore it on a new device and keep the old secret shares. However, it is possible to successfully restore a Core Secret's backup (all Core Secret application data, including all secret shares) on the same device it was originally backed-up from. The reason is simply for preventing multiple instances of secret shares running on different devices. The most common method for overcoming this limitation is simply by <a href="#secret-sharing-reshare-btle">resharing the secret</a> before switching to another device.</p>
+
+
+	  <h3 id="secret-sharing-pasteboard">Pasteboard & temporary files</h3>
+	  <p>It is often possible and convenient to <em>copy</em> a recovered secret data in the pasteboard buffer. While iOS doesn't provide a foolproof system-wide mechanism to delete this buffer, Core Secret tries to minimize the duration a secret is held in this buffer by deleting it while in background few minutes after Core Secret has been backgrounded. Note that if Core Secret is killed it may not have had the time to wipe out this buffer, in this case just be sure to restart Core Secret.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/en/copy.png" class="thumbnail">
+		    <img src="images/en/copy.png" alt="">
+		  </a>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>Likewise in several occassions temporary files are either generated or copied to Core Secret, for instance when a file is copied to Core Secret through iTunes or when a file is <em>opened with Core Secret</em> from another iOS app. In these cases as soon as this file is encrypted by Core Secret its plaintext representation is deleted from Core Secret, also anytime Core Secret is exited (when the home button is pressed) all temporary files are deleted. Maybe the unattended side effect will be to lose a plaintext file you still haven't encrypted; in this case just re-open it with Core Secret and don't wait for encrypting it.</p>
+
+
+
+	  <div class="page-header">
+	    <h1 id="group">Shared encryption key</h1>
+	  </div>
+
+	  <h3 id="group-create">Create a shared encryption key</h3>
+	  <p>The second most important feature of Core Secret is directly a by-product of the previous Bluetooth sharing functionality, in fact it is a particular case of this feature. In effect, like it's possible to share a file or a secret note this functionality enables the sharing of an encryption key.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/group1.png" class="thumbnail">
+		    <img src="images/en/group1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Create a shared encryption key that will later be used to encrypt photos.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/group2.png" class="thumbnail">
+		    <img src="images/en/group2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>The icons displayed in this table are different for secret shares whose the underlying secret is an encryption key than for the others types of secrets. In this case <strong>Photos</strong> will be a kind of container for encrypted photos, whereas <strong>Note example</strong> is just an immutable secret note.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="group-add">Adding encrypted items</h3>
+	  <p>Shared encryption keys provide several benefits among them are that once recovered an encryption key can be used to encrypt one or more new secret items, and these items will have fewer restrictions than in the Bluetooth sharing mode. Indeed there is no size limitation in this mode and also ciphertexts are transmitted in full and stored in full on a device.</p>
+
+	  <p>For instance an encryption key might be used to encrypt a set of photos.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/group3.png" class="thumbnail">
+		    <img src="images/en/group3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>When the encryption key <strong>Photos</strong> is recovered a table with a list of all items encrypted with this key is presented to the user. As expected, in this case the table is currently empty.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/group4.png" class="thumbnail">
+		    <img src="images/en/group4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Metadata for a new photo.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/group5.png" class="thumbnail">
+		    <img src="images/en/group5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>A new picture is taken and validated.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/group6.png" class="thumbnail">
+		    <img src="images/en/group6.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>This photo is encrypted with the encryption key <strong>Photos</strong> and therefore becomes visible in the list of encrypted items associated with this key. It is then possible to decrypt this photo and view it or to access its informations.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/group7.png" class="thumbnail">
+		    <img src="images/en/group7.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>A second photo was taken.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>At the difference of the Bluetooth sharing mode a same encryption key can be used to encrypt more than one item which will provide more flexibility to asynchronously share encrypted elements with other peers. Moreover, as soon as an encryption key is recovered it can be used without limit to decrypt any data that was previously encrypted with this key. Of course if the secret share corresponding to an encryption key is deleted from Core Secret all the items encrypted with this key will become unavailable and will therefore be automatically deleted by the application.</p>
+
+	  <p>In this mode it is possible to create new secrets from the following pre-defined templates:</p>
+	  <ul>
+	    <li>Note</li>
+	    <li>File (a file's size is not limited anymore but in practice its maximum size will depend on the quantity of memory available on the system, usually it will work with 50 MB files unless a password is used which in this case will constrain the memory a lot more and will require smaller files)</li>
+	    <li>Password</li>
+	    <li>Contact</li>
+	    <li>Photo or video</li>
+	  </ul>
+
+
+	  <h3 id="group-airdrop">Airdrop sharing</h3>
+
+	  <p>The encryption key being shared with one or more peers it is possible to send an element encrypted with this key to one of these peers and these peers will be able to decrypt it from their shares of the initial secret (once recovered). By extending the previous example it is possible to send an encrypted copy of one of the photos to another peer by using Airdrop (<a href="faq.en.html#compat-devices">see the FAQ</a> to see the list of current Airdrop compatibles devices).</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/airdrop1.png" class="thumbnail">
+		    <img src="images/en/airdrop1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Tap <strong>Share encrypted</strong> to send <strong>Photo 1</strong> encrypted to another peer reachable by Wifi or Bluetooth 2.0. Of course the remote peer will need to possess a share of the initial secret to be able to decrypt this photo and to import it.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/airdrop2.png" class="thumbnail">
+		    <img src="images/en/airdrop2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Peer's selection.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/airdrop3.png" class="thumbnail">
+		    <img src="images/en/airdrop3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>The peer receives the Airdrop request and chooses to accept it. The encrypted message is automatically opened with Core Secret.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/airdrop4.png" class="thumbnail">
+		    <img src="images/en/airdrop4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Core Secret automatically pre-selects the corresponding encryption key shared with the sender and used to encrypt <strong>Photo 1</strong> and ask the user to confirm this key in order to start recovering the encryption key and then decrypt the photo.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/airdrop5.png" class="thumbnail">
+		    <img src="images/en/airdrop5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>The encryption key is recovered, <strong>Photo 1</strong> is decrypted and imported. The blue font color used to display its name is used to signal this is a newly imported item.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>With this method it is possible to encrypt and share items of bigger sizes. It is currently possible to send such ciphertexts to a remote peer through Airdrop or by Mail.</p>
+
+
+	  <h3 id="group-qr">QR code sharing</h3>
+
+	  <p>When the size of an encrypted item is really small, that is when its plaintext was around at most 256 bytes, it is possible to share it with a peer by using a QR code representation of the encrypted data and making it scan by the peer. This method is different but the result is the same than with previous Mail and <a href="#group-airdrop">Airdrop</a> methods.</p>
+
+	  <p>For instance an encryption key can be used to encrypt <strong>Contact</strong> informations and if the corresponding data is short enough a QR code will automatically be generated and may be shared.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/contact1.png" class="thumbnail">
+		    <img src="images/en/contact1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Secret contact informations. This contact was encrypted with a shared encryption key.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/contact2.png" class="thumbnail">
+		    <img src="images/en/contact2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>In the detailed informations associated with this contact element a QR code section is automatically included. This QR code represents the encrypted data for the secret contact <strong>Alice</strong>. This QR code can be scanned and decrypted by a peer sharing the same encryption key.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h4>QR code scanning</h4>
+	  <p>The <strong>Scan QR code</strong> functionality available from the main menu can be used to either scan a public key (from a peer) or an encrypted shared item. Core Secret also provides a shortcut to access this functionality simply by shaking the device from the main menu.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/en/qr-scan-menu.png" class="thumbnail">
+		    <img src="images/en/qr-scan-menu.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Directly scan a QR code.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="group-rebind">Duplicating a secret</h3>
+
+	  <p>An encrypted item may also be encrypted with a new encryption key different from the original key used to encrypt this item. This functionality may be used in order to reshare a secret item with a new peer, one that had no share from the original encryption key.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/en/group-reassign1.png" class="thumbnail">
+		    <img src="images/en/group-reassign1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>By taping <strong>Encrypt</strong> <strong>Photo 1</strong> currently encrypted with the encryption key <strong>Photos</strong> is duplicated and assigned to another encryption key.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/en/group-reassign2.png" class="thumbnail">
+		    <img src="images/en/group-reassign2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>The target encryption key is selected among all encryption keys currently available in Core secret on the device. <strong>Photos copy</strong> is selected and <strong>Photo 1</strong> is encrypted with this key.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+
+	  <div class="page-header">
+	    <h1 id="settings">Settings</h1>
+	  </div>
+
+	  <h3 id="settings-btle">Managing Bluetooth 4.0 services</h3>
+	  <p>In the settings, Bluetooth 4.0 services can be disabled which means that no peer will be able to connect to this device to request any secret share stored on this device. This functionality might be useful for improving the battery life when Core secret is not needed or to further improve the security. Indeed, it is possible to think of a use case where a secret would be shared between multiple peers, where every shares would be required to recover the original secret and in which a device would disable this option as well as its Wifi and mobile network. Therefore in this case only that device would be able to complete the recovery of the secret. Indeed, any other device attempting the recovery would always fail to recover the last mandatory share held by that device.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/en/settings1.png" class="thumbnail">
+		    <img src="images/en/settings1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Settings</strong> of Core Secret.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <h3 id="settings-ssconfirmation">Confirm secret sharing</h3>
+	  <p>By default a peer automatically accepts any new secret share received from authenticated peers (peers with authorized public keys). However when enabled the second option presented in the settings of Core Secret prevents this behavior. In this case new secret shares received by the device will be required to be explicitly accepted by the user (see screenshot below). Moreover, when the application is not active any new secret share received is automatically refused and discarded.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/en/settings2.png" class="thumbnail">
+		    <img src="images/en/settings2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>A share request requiring to be explicitly accepted.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+
+	  <div class="page-header">
+	    <h1 id="crypto">Crypto</h1>
+	  </div>
+
+	  <p>Core Secret's crypto source code is available on github in <a href="https://github.com/seb-m/CryptoPill">this repository</a>.</p>
+
+	  <p>Details of cryptographic primitives used:</p>
+
+	  <ul>
+	    <li>The crypto library used for performing secret-key cryptography and public-key cryptography is <a href="http://nacl.cr.yp.to/">NaCl</a>, more precisely Core Secret uses the <a href="https://github.com/jedisct1/libsodium">libsodium</a> port of NaCl.</li>
+	    <li>All public keys used are keys on the elliptic curve <a href="http://nacl.cr.yp.to/scalarmult.html">Curve25519</a>.</li>
+	    <li>Public-key encryptions use the <code>crypto_box_curve25519xsalsa20poly1305</code> primitive as <a href="http://nacl.cr.yp.to/box.html">specified</a> in NaCl.</li>
+	    <li>Secret-key encryptions use the <code>crypto_secretbox_xsalsa20poly1305</code> primitive as <a href="http://nacl.cr.yp.to/secretbox.html">specified</a> in NaCl. These cryptosystems use Salsa20 and Poly1305 respectively for encryption and as MAC.</li>
+	    <li>The secret sharing scheme implemented is the <a href="http://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir's threshold secret sharing scheme</a>.</li>
+	    <li>The <a href="http://en.wikipedia.org/wiki/Proof_of_knowledge#Schnorr_protocol">Schnorr identification scheme</a> on elliptic curve <a href="http://ed25519.cr.yp.to/">Ed25519</a> is used to implement proofs-of-knowledge. Its related Schnorr signature scheme is also used for providing proofs-of-possessions.</li>
+	    <li>Password based key derivations use <a href="http://www.tarsnap.com/scrypt.html">scrypt</a> with the following parameters: <code>r=8, p=1, N=32768 or N=65536</code>.</li>
+	    <li>The CSPRNG used to generate keys and IVs is the one provided in the iOS framework which is expected to <a href="http://opensource.apple.com/source/Security/Security-55179.11/sec/Security/SecFramework.c">directly read</a> random bytes from <code>/dev/random</code>.</li>
+	    <li>The digest function <code>SHA256</code> and its related <code>HMAC-SHA256</code> used in Core Secret come from the CommonCrypto framework from iOS's SDK.</li>
+	  </ul>
+
+
+
+	  <!--
+	  <div class="page-header">
+	    <h1 id="protocol">Protocol</h1>
+	  </div>
+	  -->
+
+
+
+	  <div class="page-header">
+	    <h1 id="api">API Interface</h1>
+	  </div>
+
+	  <p>Third parties applications may interact with Core Secret by using Core Secret to encrypt or decrypt messages using secret keys provided and managed by Core Secret. A client application only needs to follow the request scheme presented in the following sections. See <a href="https://github.com/seb-m/CoreSecretClientExample">this example application</a> for a concrete implementation.</p>
+
+	  <h3 id="api-scheme">URL scheme</h3>
+	  <p>Core Secret implements the inter-applications protocol as specified by <a href="http://x-callback-url.com/">x-callback-url</a>. In particular, Core Secret internally uses the <a href="https://github.com/tapsandswipes/InterAppCommunication">InterAppCommunication</a> library to handle external requests and return responses requests.</p>
+
+	  <p>Core Secret's <em>URL scheme</em> is <code>coresecret://</code>, encryption and decryption <em>actions</em> are respectively <code>encrypt</code> and <code>decrypt</code>.</p>
+
+
+	  <h3 id="api-encrypt">Encryption request</h3>
+	  <p>Expected request parameters:</p>
+	  <ul>
+	    <li><code>description</code> <em>(string, optional)</em>: secret's public description.</li>
+	    <li><code>plaintext</code> <em>(string, required)</em>: message to encrypt. <code>plaintext</code> will be encrypted with an encryption key selected by the user at Core Secret's launch.</li>
+	    <li><code>filename</code> <em>(string, optional)</em>: filename if <code>plaintext</code> is the content of a file. In this case file's content must be Base 64 encoded before assigning it to its <code>plaintext</code> parameter.</li>
+	    <li><code>store</code> <em>(bool, optional, default value: 0)</em>: 1 if the encrypted result must be store in Core Secret; 0 otherwise.</li>
+	    <li><code>addPassword</code> <em>(bool, optional, default value: 0)</em>: 1 if a password must be provided; 0 otherwise.</li>
+	    <li><code>scryptN</code> <em>(int, optional)</em>: value of parameter N used by scrypt, only expected if <code>addPassword</code> is also provided as request parameter. Its value must be greater or equal to <code>32768</code>. If this parameter is not provided a choice will be interactively presented to the user when the password is asked.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Example of encryption request performed by an application <a href="https://github.com/seb-m/CoreSecretClientExample">CSClient</a> using the library <a href="https://github.com/tapsandswipes/InterAppCommunication">InterAppCommunication</a>.</p>
+	    <pre>coresecret://x-callback-url/encrypt?&amp;plaintext=&lt;message to encrypt&gt;&amp;description=Example&amp;x-source=CSClient&amp;x-cancel=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D818A521F-A6F2-4183-9116-216F190385E0%26IACResponseType%3D2%26&amp;x-error=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D818A521F-A6F2-4183-9116-216F190385E0%26IACResponseType%3D1%26&amp;x-success=csclient%3A%2F%2Fx-callback-url</pre>
+	  </div>
+
+	  <p>Expected response request parameters:</p>
+	  <ul>
+	    <li><code>encryptedData</code> <em>(base64 string, required)</em>: encrypted data corresponding to the encryption of <code>plaintext</code>. This parameter is missing if an error was encountered while handling the encrypt request.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Example of response request returned by Core Secret.</p>
+	    <pre>csclient://x-callback-url/IACRequestResponse?&amp;IACRequestID=818A521F-A6F2-4183-9116-216F190385E0&amp;IACResponseType=0&amp;encryptedData=&lt;encrypted base 64 message&gt;</pre>
+	  </div>
+
+
+	  <h3 id="api-decrypt">Decryption request</h3>
+	  <p>Expected request parameters:</p>
+	  <ul>
+	    <li><code>encryptedData</code> <em>(base64 string, required)</em>: message to decrypt. The encryption key will automatically be selected by Core Secret when it is launched and the user will need to confirm it before performing the decrypt operation.</li>
+	    <li><code>store</code> <em>(bool, optional, default value: 0)</em>: 1 if the decrypted message must be stored in Core Secret; 0 otherwise.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Example of decryption request performed by an application <a href="https://github.com/seb-m/CoreSecretClientExample">CSClient</a> using the library <a href="https://github.com/tapsandswipes/InterAppCommunication">InterAppCommunication</a>.</p>
+	    <pre>coresecret://x-callback-url/decrypt?&amp;encryptedData=&lt;encrypted base 64 message&gt;&amp;x-source=CSClient&amp;x-cancel=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D93C69763-5F10-409B-AD35-ADC4310ED3E6%26IACResponseType%3D2%26&amp;x-error=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D93C69763-5F10-409B-AD35-ADC4310ED3E6%26IACResponseType%3D1%26&amp;x-success=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D93C69763-5F10-409B-AD35-ADC4310ED3E6%26IACResponseType%3D0%26</pre>
+	  </div>
+
+	  <p>Expected response request parameters:</p>
+	  <ul>
+	    <li><code>description</code> <em>(string, optional)</em>: public description of the secret <code>plaintext</code>.</li>
+	    <li><code>plaintext</code> <em>(string, required)</em>: decrypted message. <code>plaintext</code> is Base 64 encoded if its data originate from a file (see next parameter). This parameter is missing if an error was encountered while decrypting the data.</li>
+	    <li><code>filename</code> <em>(string, optional)</em>: filename corresponding to file's content <code>plaintext</code>. In this case <code>plaintext</code> is Base 64 encoded and must be handled as file's content.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Example of response request returned by Core Secret.</p>
+	    <pre>csclient://x-callback-url/IACRequestResponse?&amp;IACRequestID=93C69763-5F10-409B-AD35-ADC4310ED3E6&amp;IACResponseType=0&amp;description=Example&amp;plaintext=&lt;secret message&gt;</pre>
+	  </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="bs-footer" role="contentinfo">
+      <div class="container">
+      </div>
+    </footer>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/documentation.js"></script>
+  </body>
+</html>

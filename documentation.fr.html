@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="iso-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Core Secret - Documentation</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/index.fr.html" class="navbar-brand">Core Secret</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="documentation.fr.html">Documentation</a>
+            </li>
+            <li>
+              <a href="faq.fr.html">FAQ</a>
+            </li>
+            <li>
+              <a href="contact.fr.html">Contact</a>
+            </li>
+	    <li>
+              <a href="documentation.en.html">English <img src="images/uk.png" width="15" class="flag" alt="flag" /></a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+
+    <div class="container bs-docs-container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="bs-sidebar hidden-print" role="complementary">
+            <ul class="nav bs-sidenav">
+             <li>
+	       <a href="#overview">Présentation</a>
+	       <ul class="nav">
+		 <li><a href="#overview-principle">Principe</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#peers">Gestion des pairs</a>
+	       <ul class="nav">
+		 <li><a href="#peers-add">Authentification de pair</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#secret-sharing">Partage de secret</a>
+	       <ul class="nav">
+		 <li><a href="#secret-sharing-btle">Partage de secret en Bluetooth 4.0</a></li>
+		 <li><a href="#secret-sharing-recover-btle">Reconstitution de secret</a></li>
+		 <li><a href="#secret-sharing-password">Protection par mot de passe</a></li>
+		 <li><a href="#secret-sharing-reshare-btle">Repartage de secret</a></li>
+		 <li><a href="#secret-sharing-backup">Restauration des secrets</a></li>
+		 <li><a href="#secret-sharing-backup">Copie et fichiers temporaires</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#group">Clé de chiffrement partagée</a>
+	       <ul class="nav">
+		 <li><a href="#group-create">Création de clé de chiffrement</a></li>
+		 <li><a href="#group-add">Ajout d'éléments chiffrés</a></li>
+		 <li><a href="#group-airdrop">Partage avec Airdrop</a></li>
+		 <li><a href="#group-qr">Partage par code QR</a></li>
+		 <li><a href="#group-rebind">Dupliquer un chiffré</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#settings">Réglages</a>
+	       <ul class="nav">
+		 <li><a href="#settings-btle">Services Bluetooth 4.0</a></li>
+		 <li><a href="#settings-ssconfirmation">Confirmation de partage de secret</a></li>
+	       </ul>
+	     </li>
+	     <li>
+	       <a href="#crypto">Crypto</a>
+	       <ul class="nav">
+	       </ul>
+	     </li>
+	     <!--
+	     <li>
+	       <a href="#protocol">Protocole</a>
+	       <ul class="nav">
+		 <li><a href="#"></a></li>
+		 <li><a href="#"></a></li>
+		 <li><a href="#"></a></li>
+		 <li><a href="#"></a></li>
+	       </ul>
+	     </li>
+	     -->
+	     <li>
+	       <a href="#api">Interface API</a>
+	       <ul class="nav">
+		 <li><a href="#api-scheme">Schéma d'URL</a></li>
+		 <li><a href="#api-encrypt">Requête de chiffrement</a></li>
+		 <li><a href="#api-decrypt">Requête de déchiffrement</a></li>
+	       </ul>
+	     </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-9 docs-main" role="main">
+	  <!--
+	  <div class="container text-center cs-doc-icon">
+	    <a href="index.fr.html"><img src="images/coresecret-1024.png" width="130"></a>
+	  </div>
+	  -->
+	  <div class="page-header">
+	    <h1 id="overview">Présentation</h1>
+	  </div>
+	  <p class="lead">Core Secret permet de diviser et partager un secret en plusieurs parts et de nécessiter leur possession pour pouvoir reconstituer le secret.</p>
+
+	  <h3 id="overview-principle">Principe</h3>
+	  <p>Chaque secret est divisé en un nombre donné de parts et un seuil minimal du nombre de parts nécessaires pour pouvoir reconstituer un secret est fixé. Concrètement une personne peut partager et distribuer un secret avec plusieurs pairs et chacun des pairs pourra par la suite reconstituer le secret en utilisant sa part et en communiquant avec d'autres pairs pour obtenir leur parts afin d'atteindre le seuil requis pour pouvoir reconstituer le secret et y accéder. Si le nombre de parts de secret requises n'est pas atteint le secret ne peut pas être reconstitué.</p>
+
+
+
+	  <div class="page-header">
+	    <h1 id="peers">Gestion des pairs</h1>
+	  </div>
+
+	  <h3 id="peers-add">Authentification de pair</h3>
+	  <p>La première étape avant de pouvoir partager un secret ou recevoir une part d'un secret est d'authentifier les pairs avec lesquels les échanges seront autorisés. Pour cela il suffit d'importer la clé publique d'un pair ou inversement de partager sa clé publique avec un pair. Une clé publique est représentée par un code QR et devra être scannée pour pouvoir être importée. L'exemple qui suit décrit Alice important la clé publique de Séb.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/alice1.png" class="thumbnail">
+		    <img src="images/fr/alice1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Ce menu liste la clé d'Alice et donne la liste des pairs authéntifiés par Alice (aucun pour le moment).</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/alice2.jpg" class="thumbnail">
+		    <img src="images/fr/alice2.jpg" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>La représentation sous forme de code QR de la clé publique de Séb est scannée par Alice pour être ajouttée à sa liste de pairs.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/alice3.png" class="thumbnail">
+		    <img src="images/fr/alice3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>La clé de Séb est désormais importée dans la liste des pairs de Alice.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/alice4.png" class="thumbnail">
+		    <img src="images/fr/alice4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Détails de la clé publique de Alice. Alice peut présenter cette clé à un pair pour à son tour être scannée et importée.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/alice5.png" class="thumbnail">
+		    <img src="images/fr/alice5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Représentations visuelles de la clé publique d'Alice.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+
+	  <div class="page-header">
+	    <h1 id="secret-sharing">Partage de secret</h1>
+	  </div>
+	  <p class="lead">Core Secret se décompose en deux principales fonctionnalités. La première permet de partager des secrets de tailles limités en utilisant le Bluetooth 4.0 Low Energy tandis qu'un second mode permet de créer et partager des secrets de tailles plus importantes de manière asynchrone.</p>
+
+
+	  <h3 id="secret-sharing-btle">Partage de secret en Bluetooth 4.0</h3>
+	  <p>La première fonctionnalité permet le partage de secrets entre différents pairs. Par exemple l'initiateur décide de créer une note secrète ou de partager un fichier texte, il sélectionne les pairs authentifiés à proximités avec lesquels il souhaite effectuer le partage et l'initie.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/share1.png" class="thumbnail">
+		    <img src="images/fr/share1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Choix du type <strong>Note</strong> comme type de secret. <strong>Le champs de description</strong> est une description optionnelle servant de méta-donnée au chiffré. Cette description ne doit pas comporter de données sensibles, <strong>elle n'est pas chiffrée</strong> et est partagée avec le secret.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/share2.png" class="thumbnail">
+		    <img src="images/fr/share2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Edition</strong> de la note secrète.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/share3.png" class="thumbnail">
+		    <img src="images/fr/share3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Menu de partage</strong>. <strong>Le seuil requis</strong> spécifie le nombre de part qu'un pair devra collecter avant de pouvoir reconstituer le secret. <strong>Le label</strong> d'une part est le nom de la clé publique utilisée, cette information est envoyée en clair et sert de méta-donnée. <strong>Les pairs</strong> sont la liste des pairs actuellement connectés en Bluetooth 4.0 et ayant Core Secret. Le cadenas fermé signifie que la clé publique du pair est authentifiée.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/share4.png" class="thumbnail">
+		    <img src="images/fr/share4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Les pairs avec lesquels le secret doit être partagé sont sélectionnés (dans ce cas uniquement Séb). Le partage est initié en tapant sur <strong>Partager</strong>. Le secret est alors envoyé à tous les pairs sélectionnés. En cas d'erreur d'un pair il est possible de recommencer l'envoi en retapant sur ce même bouton.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/share5.png" class="thumbnail">
+		    <img src="images/fr/share5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Partage terminé.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>Dans ce cas tous les échanges entre l'initiateur et les pairs sélectionnés utilisent le Bluetooth 4.0 (<a href="faq.fr.html#compat-devices">consulter la FAQ</a> pour voir la liste des appareils supportant le Bluetooth 4.0). Le Bluetooth 4.0 n'étant pas une technologie conçue pour transférer de larges quantités de données, dans ce mode les transferts sont limités à des tailles de secrets de 100 ko au maximum (cette limitation est arbitraire et pourra évoluer si les débits de transferts s'améliorent).</p>
+
+	  <p>Les types actuels de secrets prédéfinis sont les suivants :</p>
+	  <ul>
+	    <li>Note</li>
+	    <li>Fichier (dont la taille est limité à 100 ko)</li>
+	    <li>Mot de passe</li>
+	    <li>Contact</li>
+	    <li>Clé de chiffrement (voir les sections suivantes pour plus d'explications)</li>
+	  </ul>
+
+	  <h4>Remarque concernant les labels :</h4>
+	  <p>Lors du partage de secret précédent, l'option <em>Inclure les labels</em> était proposée. Cette option permet d'envoyer en clair (non chiffré) avec chaque part de secret la liste de tous les labels des clés publiques des pairs avec lesquels le secret a été partagé. Correctement renseignées, ces informations peuvent être utiles pour savoir quels pairs possèdent une part du secret et donc savoir vers qui s'adresser pour reconstituer le secret. Toutefois comme ces informations ne sont pas chiffrées elles peuvent révéler plus d'informations que nécessaire. Du coup, s'il s'avère que les destinataires des parts du secret doivent rester anonymes il suffit de désactiver cette option pour empêcher l'envoi des labels.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/fr/secret-infos.png" class="thumbnail">
+		    <img src="images/fr/secret-infos.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Avant de tenter de reconstituer un secret il est possible de visualiser certaines informations non chiffrées sur le secret. Si l'option <em>Inclure les labels</em> avait été activée lors du partage, les labels des parts sont disponibles et affichés.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="secret-sharing-recover-btle">Reconstitution de secret</h3>
+	  <p>Une fois le partage de secret accompli, non seulement chaque pair possède une part de la clé secrète utilisée pour déchiffrer le secret mais en plus le chiffré lui-même est divisé en parts et chaque pair reçoit une part du chiffré. Par conséquent aucun pair ne possède réellement sur disque la totalité du message chiffré. Pour reconstituer le secret un pair à besoin du nombre de parts (incluant les parts du secret et les parts du chiffré) fixé lors du partage initial et doit donc effectuer un nombre égal de requêtes aux pairs à proximités pour obtenir leurs parts.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/recover1.png" class="thumbnail">
+		    <img src="images/fr/recover1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Reconstitution</strong> automatique du secret. L'appareil d'Alice se connecte automatiquement aux pairs à proximité pour collecter leur part du secret.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/recover2.png" class="thumbnail">
+		    <img src="images/fr/recover2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p><strong>Affichage</strong> du secret une fois reconstitué.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>Si le seuil requis n'est pas atteint le secret ne peut pas être reconstitué. Si un ou plusieurs pairs effacent leurs parts, le secret peut devenir définitivement inaccessible. Une part est automatiquement obtenue auprès d'un pair uniquement s'il est authentifié par sa clé publique sur ce pair et après avoir démontré sa possession d'une part du secret. Cette procédure ne nécessite pas le consentement du pair. Après le partage, l'initiateur ne conserve lui aussi qu'une part du secret, par conséquent il est sur le même plan d'égalité que les autres pairs lorsqu'il souhaite reconstituer le secret. Une fois reconstitué, l'accès au secret reste possible tant que l'application reste active et que l'utilisateur ne change pas de menu.</p>
+
+
+	  <h3 id="secret-sharing-password">Protection par mot de passe</h3>
+	  <p>En plus du découpage du secret en plusieurs parts il est possible également de protéger le secret par un mot de passe. Une fois le secret reconstitué, cette protection supplémentaire imposera à l'utilisateur de fournir un mot de passe pour complètement déchiffrer le secret. Par conséquent dans ce mode, le secret est chiffré deux fois : une fois lors de l'ajout du mot de passe et une seconde fois lors du partage du secret.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/scrypt1.png" class="thumbnail">
+		    <img src="images/fr/scrypt1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>L'option d'ajout de mot de passe est activée. Les deux valeurs N présentées sont des variables de l'algorithme utilisé (voir la <a href="#crypto">section crypto</a> pour plus de détails). Plus la valeur est importante plus la protection sera importante mais aussi plus le temps de dérivation de la clé de chiffrement sera important.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/scrypt1.png" class="thumbnail">
+		    <img src="images/fr/scrypt2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Le mot de passe est entré dans le champs correspondant.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="secret-sharing-reshare-btle">Repartage de secret</h3>
+	  <p>Une fois le secret partagé et envoyé il n'est plus possible de le modifier, ni d'ajouter de nouveaux pairs à ce partage. Par contre il est possible de repartager un secret avec de nouveaux pairs. Il suffit de reconstituer un secret, de le visualiser et d'aller dans la section des actions de partage :</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/fr/reshare1.png" class="thumbnail">
+		    <img src="images/fr/reshare1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Taper sur <strong>Repartager</strong> pour rechiffrer et repartager le secret. <strong>Attention</strong> toutes les autres options de ce menu permettent de partager le secret <strong>en clair</strong>, c'est à dire que dans ces autres cas le secret <strong>n'est pas chiffré</strong>.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>Cette option peut être utile pour faire une sauvegarde d'un secret en l'assignant à de nouveaux appareils.</p>
+
+
+	  <h3 id="secret-sharing-backup">Restauration des secrets</h3>
+	  <p>Une part de secret est étroitement associée avec un appareil précis, il ne sera donc possible de restaurer le secret après une sauvegarde des données de l'application uniquement sur ce même appareil. Il ne sera pas possible de le transférer sur un nouvel appareil. La raison est simple : empêcher deux appareils différents de posséder les mêmes parts de secrets. Pour contourner cette restriction il faut au préalable <a href="#secret-sharing-reshare-btle">repartager le secret</a>.</p>
+
+
+	  <h3 id="secret-sharing-pasteboard">Copie et fichiers temporaires</h3>
+	  <p>Il est souvent possible et pratique de <em>copier</em> les données secrètes correspondant à un secret reconstitué. Toutefois iOS ne fourni pas de mécanisme pour pouvoir effacer l'élément secret copié de manière sécurisé immédiatement après utilisation. A la place, Core Secret essaye de minimiser la durée pendant laquelle le secret reste disponible en clair et l'efface automatiquement après quelques minutes lorsque l'application est en tâche de fond. Noter que si Core Secret est arrêté de manière impromptu il est possible que le secret ne puisse pas être effacé, dans ce cas il faut explicitement relancer Core Secret pour pouvoir déclencher l'effacement du secret.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/fr/copy.png" class="thumbnail">
+		    <img src="images/fr/copy.png" alt="">
+		  </a>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>De même, plusieurs fonctionnalités de Core Secret sont soit amenées à générer ou à manipuler des fichiers temporaires en clair. Par exemple cela se produit lorsqu'un fichier est copié à partir de iTunes dans Core Secret ou quand un fichier est ouvert avec Core Secret à partir d'une autre application iOS. Dans ces cas dès que le fichier est utilisé par Core Secret et est chiffré, le fichier temporaire est effacé. De même quand le bouton <em>home</em> est pressé, tous les fichiers temporaires sont effacés.</p>
+
+
+
+	  <div class="page-header">
+	    <h1 id="group">Clé de chiffrement partagée</h1>
+	  </div>
+
+	  <h3 id="group-create">Création de clé de chiffrement</h3>
+	  <p>La seconde fonctionnalité importante de Core Secret découle directement de la précédente, en fait çà en est un cas particulier. En effet, au même titre qu'il est possible de partager une note secrète, il est possible de partager uniquement une clé secrète de chiffrement.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/group1.png" class="thumbnail">
+		    <img src="images/fr/group1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Création d'une clé de chiffrement qui sera utilisée plus tard pour le chiffrement de photos.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/group2.png" class="thumbnail">
+		    <img src="images/fr/group2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Les icônes des éléments listés dans le menu principal permettent de distinguer les clés de chiffrement des autres types de secrets. La rubrique <strong>Photos</strong> peut être imaginée comme une sorte de conteneur pour les photos qui seront chiffrées avec cette clé, tandis que <strong>Note exemple</strong> est simplement une note secrète non-modifiable.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="group-add">Ajout d'éléments chiffrés</h3>
+	  <p>L'intérêt d'une telle clé de chiffrement est qu'une fois reconstituée un pair pourra utiliser cette clé pour à son tour chiffrer un ou plusieurs éléments. Dans ce mode la taille des fichiers chiffrés n'est plus limitée et chaque chiffré est conservé en totalité sur le périphérique.</p>
+
+	  <p>Par exemple une clé de chiffrement pourra être créée et être utilisée pour chiffrer différentes photos.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/group3.png" class="thumbnail">
+		    <img src="images/fr/group3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Une fois la clé de chiffrement <strong>Photos</strong> reconstituée la liste des éléments ayant été chiffrés par cette clé est présentée. Dans ce cas, il n'y pour l'instant aucun élément.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/group4.png" class="thumbnail">
+		    <img src="images/fr/group4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Les informations pour une nouvelle photo sont créées.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/group5.png" class="thumbnail">
+		    <img src="images/fr/group5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Une photo est prise et validée.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/group6.png" class="thumbnail">
+		    <img src="images/fr/group6.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>La photo est chiffrée par la clé de chiffrement <strong>Photos</strong> et est donc désormais présentée dans la liste des éléments chiffrés de cette clé. Il est possible de visualiser la photo ou d'accéder à ses informations.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/group7.png" class="thumbnail">
+		    <img src="images/fr/group7.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Une seconde photo a été ajoutée.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>A la différence du mode de partage des parts en Bluetooth 4.0, dans ce cas une même clé de chiffrement peut être utilisée pour chiffrer plusieurs éléments différents, ce qui permet une meilleure asynchronicité avec les autres pairs. Par exemple, une clé peut être reconstituée avec l'aide d'un pair mais peut être utilisée pour chiffrer un élément pour un autre pair ayant une part du secret mais n'étant pas actuellement à proximité. L'application liste dans un menu tous les chiffrés associés à une même clé de chiffrement. Du moment qu'une clé de chiffrement est reconstituée tous les chiffrés associés pourront être accédés. Si une clé secrète est effacée tous les chiffrés correspondants deviennent inaccessibles et sont par conséquent également effacés.</p>
+
+	  <p>Dans ce mode, il est possible de créer les types de secrets prédéfinis suivants :</p>
+	  <ul>
+	    <li>Note</li>
+	    <li>Fichier (la taille n'est plus limitée, mais en pratique dépend de la quantité de mémoire disponible, en général des chiffrés de 50 mo sont possibles, moins en cas de présence d'un mot de passe)</li>
+	    <li>Mot de passe</li>
+	    <li>Contact</li>
+	    <li>Photo ou vidéo</li>
+	  </ul>
+
+
+	  <h3 id="group-airdrop">Partage par Airdrop</h3>
+
+	  <p>La clé de chiffrement étant initialement partagée avec un ou plusieurs pairs il est possible d'envoyer un élément chiffré par cette clé à un pair et ce pair pourra le déchiffrer. En effet, le pair possédant une part du secret correspondant à la clé de chiffrement, il sera capable de reconstituer la clé de chiffrement puis de déchiffrer l'élément reçu et de l'importer. En reprenant l'exemple précédent il est possible de transférer une copie du chiffré d'une photo vers un autre pair en utilisant Airdrop (<a href="faq.fr.html#compat-devices">consulter la FAQ</a> pour voir la liste des appareils compatibles avec Airdrop).</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/airdrop1.png" class="thumbnail">
+		    <img src="images/fr/airdrop1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Taper sur <strong>Partager</strong> pour envoyer le chiffré <strong>Photo 1</strong> vers un autre pair joignable en Wifi ou Bluetooth 2.0. Bien sûr le pair devra posséder une part de la clé secrète pour pouvoir déchiffrer l'élément envoyé.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/airdrop2.png" class="thumbnail">
+		    <img src="images/fr/airdrop2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Sélection du pair.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/airdrop3.png" class="thumbnail">
+		    <img src="images/fr/airdrop3.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Le pair reçoit la requête de réception du secret chiffré et décide de l'accepter. Le message est automatiquement ouvert avec Core Secret, l'application est exécutée.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/airdrop4.png" class="thumbnail">
+		    <img src="images/fr/airdrop4.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Core Secret pré-sélectionne automatiquement la clé correspondante qui a permis de chiffrer <strong>Photo 1</strong> et invite l'utilisateur à reconstituer cette clé de chiffrement pour pouvoir déchiffrer le secret reçu avec cette clé.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/airdrop5.png" class="thumbnail">
+		    <img src="images/fr/airdrop5.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>La clé de chiffrement est reconstituée, l'élément reçu <strong>Photo 1</strong> est déchiffré et importé. La couleur bleu du nom de l'élément signifie qu'il s'agit d'un nouvel élément importé.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <p>Cette méthode permet de chiffrer et partager des éléments de tailles plus importantes. Il est actuellement possible d'envoyer un chiffré à un pair avec Airdrop ou par Mail.</p>
+
+
+	  <h3 id="group-qr">Partage par code QR</h3>
+
+	  <p>Lorsque l'élément chiffré est de très petite taille (environ 256 octets de taille de clair au maximum), il est possible de partager ce chiffré avec un autre pair en utilisant une représentation en code QR du secret. La procédure est différente mais le résultat est le même que dans la méthode précédente <a href="#group-airdrop">Airdrop</a>.</p>
+
+	  <p>Par exemple une clé de chiffrement peut être utiliser pour chiffrer un secret de type <strong>Contact</strong> et ensuite le partager avec un pair à l'aide de la représentation de son chiffré en code QR.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/contact1.png" class="thumbnail">
+		    <img src="images/fr/contact1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Informations secrètes de contact d'<strong>Alice</strong>. Ce contact a été chiffré avec une clé de chiffrement partagée.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/contact2.png" class="thumbnail">
+		    <img src="images/fr/contact2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Dans les détails du chiffré apparaît automatiquement une section avec un code QR correspondant au chiffré du contact <strong>Alice</strong>. Ce code QR peut être scanné par un pair pour importer les informations d'Alice.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h4>Scan de code QR</h4>
+	  <p>L'option <strong>Scanner un code QR</strong> accessible à partir du menu principal permet de scanner indifféremment une clé publique de pair ou un secret chiffré partagé. Il existe également un raccourci pour déclencher la fonction de scan, il suffit de secouer l'appareil à partir du menu principal.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/fr/qr-scan-menu.png" class="thumbnail">
+		    <img src="images/fr/qr-scan-menu.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Accès au scan de code QR.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <h3 id="group-rebind">Dupliquer un chiffré</h3>
+
+	  <p>Il est possible d'associer un élément chiffré avec une nouvelle clé de chiffrement différente de celle utilisée initialement pour chiffrer le secret. Cette fonction permet également de repartager un chiffré avec d'autres pairs qui n'avaient pas de parts de la clé de chiffrement originale.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-2">
+		<div class="thumbnail">
+		  <a href="images/fr/group-reassign1.png" class="thumbnail">
+		    <img src="images/fr/group-reassign1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>En tapant sur <strong>Chiffrer</strong> la <strong>Photo 1</strong> chiffrée avec la clé de chiffrement <strong>Photos</strong> est dupliquée vers une autre clé de chiffrement.</p>
+		  </div>
+		</div>
+	      </div>
+	      <div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+		  <a href="images/fr/group-reassign2.png" class="thumbnail">
+		    <img src="images/fr/group-reassign2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>La nouvelle clé de chiffrement est choisie parmi les clés de chiffrement disponibles dans Core Secret. En l'occurrence <strong>Photos doublons</strong> est sélectionnée et chiffrera à son tour <strong>Photo 1</strong>.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+
+	  <div class="page-header">
+	    <h1 id="settings">Réglages</h1>
+	  </div>
+
+	  <h3 id="settings-btle">Services Bluetooth 4.0</h3>
+	  <p>Dans les réglages il est possible de désactiver les services Bluetooth 4.0. Dans ce cas aucun pair ne pourra se connecter et obtenir des parts de secrets enregistrés sur cet appareil. Cette fonctionnalité peut être utile pour économiser la batterie et pour renforcer la sécurité. Il est possible d'imaginer un scénario dans lequel un secret est partagé entre plusieurs pairs, où tous sont requis pour reconstituer le secret et dans lequel un appareil désactive cette option et peut même en plus désactiver le Wifi et le mobile. Dans ce cas seul cet appareil sera en mesure de faire des requêtes pour reconstituer le secret en utilisant le Bluetooth 4.0. En effet, il manquera toujours une part aux autres pairs pour reconstituer le secret.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/fr/settings1.png" class="thumbnail">
+		    <img src="images/fr/settings1.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Menu des <strong>Réglages</strong> de Core Secret.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <h3 id="settings-ssconfirmation">Confirmation de partage de secret</h3>
+	  <p>Par défaut un pair accepte automatiquement tous les nouveaux partages de secrets initiés par des pairs connus, authentifiés par leur clé publique. La seconde option du menu des Réglages permet de requérir l'accord préalable du pair lorsqu'un secret est partagé. Lorsque cette option est activée un menu est présentée (voir l'image ci-dessous) et l'utilisateur peut choisir d'accepter ou de refuser le nouveau partage de secret. En revanche, lorsque l'application n'est pas active tout nouveau partage de secret sera automatiquement refusé.</p>
+
+	  <div class="bs-example">
+	    <div class="row">
+	      <div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="thumbnail">
+		  <a href="images/fr/settings2.png" class="thumbnail">
+		    <img src="images/fr/settings2.png" alt="">
+		  </a>
+		  <div class="caption text-center">
+		    <p>Réception d'une nouvelle part de secret, demande d'acceptation.</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+
+
+
+	  <div class="page-header">
+	    <h1 id="crypto">Crypto</h1>
+	  </div>
+
+	  <p>Le code source des primitives cryptographiques utilisées dans Core Secret est contenu et disponible dans le projet <a href="https://github.com/seb-m/CryptoPill">CryptoPill</a>.</p>
+
+	  <p>Détails des primitives cryptographiques utilisés :</p>
+
+	  <ul>
+	    <li>La librairie crypto utilisée pour effectuer les chiffrements à clé secrète et pour effectuer la cryptographie à clé publique est <a href="http://nacl.cr.yp.to/">NaCl</a>, plus précisément Core Secret utilise le port <a href="https://github.com/jedisct1/libsodium">libsodium</a> de cette librairie.</li>
+	    <li>Les clés publiques utilisées sont des clés sur le groupe des courbes elliptiques <a href="http://nacl.cr.yp.to/scalarmult.html">Curve25519</a>.</li>
+	    <li>Les chiffrements à base de cryptographie à clé publique utilisent la primitive <code>crypto_box_curve25519xsalsa20poly1305</code> <a href="http://nacl.cr.yp.to/box.html">spécifiée</a> dans NaCl.</li>
+	    <li>Les chiffrements à base de cryptographie à clé secrète utilisent la primitive <code>crypto_secretbox_xsalsa20poly1305</code> <a href="http://nacl.cr.yp.to/secretbox.html">spécifiée</a> dans NaCl. En outre Salsa20 et Poly1305 sont utilisés respectivement comme algorithme de chiffrement et comme MAC.</li>
+	    <li>Le partage de secret utilise le <a href="http://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">schéma de partage de secret à seuil de Shamir</a>.</li>
+	    <li>Les preuves de connaissances utilisent le <a href="http://en.wikipedia.org/wiki/Proof_of_knowledge#Schnorr_protocol">schéma d'identification de Schnorr</a> sur le groupe des courbes elliptiques <a href="http://ed25519.cr.yp.to/">Ed25519</a>.</li>
+	    <li>Les dérivations de clé à partir de mot de passe utilisent la fonction <a href="http://www.tarsnap.com/scrypt.html">scrypt</a> avec les paramètres <code>r=8, p=1, N=32768 ou N=65536</code>.</li>
+	    <li>Le générateur d'aléas utilisé pour générer les clés de chiffrement, les nonces et les vecteurs d'initialisation est celui fourni dans le SDK de iOS, lequel <a href="http://opensource.apple.com/source/Security/Security-55179.11/sec/Security/SecFramework.c">accède directement</a> à <code>/dev/random</code>.</li>
+	    <li>Les fonctions <code>SHA256</code> et <code>HMAC-SHA256</code> utilisées proviennent du framework CommonCrypto du SDK de iOS.</li>
+	  </ul>
+
+
+
+	  <!--
+	  <div class="page-header">
+	    <h1 id="protocol">Protocole</h1>
+	  </div>
+
+	  <p><strong>FIXME</strong></p>
+	  -->
+
+
+
+	  <div class="page-header">
+	    <h1 id="api">Interface API</h1>
+	  </div>
+
+	  <p>Il est possible d'interagir avec Core Secret à partir d'une autre application pour chiffrer ou déchiffrer un message en utilisant une clé secrète maintenue dans Core Secret. Il suffit d'appeler Core Secret en utilisant le schéma de requêtes présenté dans les sections suivantes. L'application <a href="https://github.com/seb-m/CoreSecretClientExample">CSClient</a> introduit un exemple détaillé d'utilisation de cette interface.</p>
+
+	  <h3 id="api-scheme">Schéma d'URL</h3>
+	  <p>Core Secret adhère au protocole de communication inter-applications spécifié par <a href="http://x-callback-url.com/">x-callback-url</a>. En outre, Core Secret utilise la librairie <a href="https://github.com/tapsandswipes/InterAppCommunication">InterAppCommunication</a> pour traiter les requêtes reçues et retourner les requêtes réponses.</p>
+
+	  <p>Le <em>schéma</em> d'URL de Core Secret est <code>coresecret://</code>, les <em>actions</em> de chiffrement et de déchiffrement sont respectivement <code>encrypt</code> et <code>decrypt</code>.</p>
+
+
+	  <h3 id="api-encrypt">Requête de chiffrement</h3>
+	  <p>Paramètres de requêtes valides :</p>
+	  <ul>
+	    <li><code>description</code> <em>(string, optionnel)</em> : description publique du secret <code>plaintext</code> à chiffrer.</li>
+	    <li><code>plaintext</code> <em>(string, requis)</em> : message à chiffrer. <code>plaintext</code> sera chiffré avec une clé de chiffrement sélectionnée par l'utilisateur lors du lancement de Core Secret.</li>
+	    <li><code>filename</code> <em>(string, optionnel)</em> : nom du fichier si <code>plaintext</code> correspond au contenu d'un fichier. Dans ce cas le contenu du fichier doit impérativement être encodé en Base 64 avant d'être assigné au paramètre <code>plaintext</code>.</li>
+	    <li><code>store</code> <em>(bool, optionnel, valeur par défaut: 0)</em> : 1 si le chiffré doit être conservé dans Core Secret; 0 si il ne doit pas être conservé.</li>
+	    <li><code>addPassword</code> <em>(bool, optionnel, valeur par défaut: 0)</em> : 1 si le chiffré doit en plus être protégé par mot de passe; 0 si non.</li>
+	    <li><code>scryptN</code> <em>(int, optionnel)</em> : valeur du paramètre N de scrypt, uniquement utilisé si <code>addPassword</code> fait également parti de la requête. Sa valeur doit être supérieure ou égale à <code>32768</code>. Si ce paramètre n'est pas fourni il sera demandé lors du chiffrement à l'utilisateur au moment de la saisi du mot de passe.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Exemple de requête de chiffrement effectuée par une application <a href="https://github.com/seb-m/CoreSecretClientExample">CSClient</a> utilisant la librairie <a href="https://github.com/tapsandswipes/InterAppCommunication">InterAppCommunication</a>.</p>
+	    <pre>coresecret://x-callback-url/encrypt?&amp;plaintext=&lt;message à chiffrer&gt;&amp;description=Exemple&amp;x-source=CSClient&amp;x-cancel=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D818A521F-A6F2-4183-9116-216F190385E0%26IACResponseType%3D2%26&amp;x-error=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D818A521F-A6F2-4183-9116-216F190385E0%26IACResponseType%3D1%26&amp;x-success=csclient%3A%2F%2Fx-callback-url</pre>
+	  </div>
+
+	  <p>Paramètres obtenus dans la requête de réponse :</p>
+	  <ul>
+	    <li><code>encryptedData</code> <em>(base64 string, requis)</em> : le chiffré correspondant au chiffrement de <code>plaintext</code>. Ce paramètre sera manquant si une erreur est survenue lors du chiffrement.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Exemple de requête de réponse renvoyée par Core Secret.</p>
+	    <pre>csclient://x-callback-url/IACRequestResponse?&amp;IACRequestID=818A521F-A6F2-4183-9116-216F190385E0&amp;IACResponseType=0&amp;encryptedData=&lt;message chiffré en base 64&gt;</pre>
+	  </div>
+
+
+	  <h3 id="api-decrypt">Requête de déchiffrement</h3>
+	  <p>Paramètres de requêtes valides :</p>
+	  <ul>
+	    <li><code>encryptedData</code> <em>(base64 string, requis)</em> : le message à déchiffrer. La clé de chiffrement sera automatiquement sélectionnée lors du lancement de Core Secret et l'utilisateur devra confirmer le déchiffrement du message.</li>
+	    <li><code>store</code> <em>(bool, optionnel, valeur par défaut: 0)</em> : 1 si le message déchiffré doit être conservé dans Core Secret; 0 si il ne doit pas être conservé.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Exemple de requête de déchiffrement envoyée par une application <a href="https://github.com/seb-m/CoreSecretClientExample">CSClient</a> utilisant la librairie <a href="https://github.com/tapsandswipes/InterAppCommunication">InterAppCommunication</a>.</p>
+	    <pre>coresecret://x-callback-url/decrypt?&amp;encryptedData=&lt;message chiffré en base 64&gt;&amp;x-source=CSClient&amp;x-cancel=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D93C69763-5F10-409B-AD35-ADC4310ED3E6%26IACResponseType%3D2%26&amp;x-error=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D93C69763-5F10-409B-AD35-ADC4310ED3E6%26IACResponseType%3D1%26&amp;x-success=csclient%3A%2F%2Fx-callback-url%2FIACRequestResponse%3F%26IACRequestID%3D93C69763-5F10-409B-AD35-ADC4310ED3E6%26IACResponseType%3D0%26</pre>
+	  </div>
+
+	  <p>Paramètres obtenus dans la requête de réponse :</p>
+	  <ul>
+	    <li><code>description</code> <em>(string, optionnel)</em> : description publique du secret <code>plaintext</code>.</li>
+	    <li><code>plaintext</code> <em>(string, requis)</em> : message déchiffré. <code>plaintext</code> est encodé en Base 64 si il correspond au contenu d'un fichier (voir ci-dessous). Ce paramètre sera manquant si une erreur est survenue lors du déchiffrement.</li>
+	    <li><code>filename</code> <em>(string, optionnel)</em> : nom du fichier auquel correspond le contenu de <code>plaintext</code>. Dans ce cas la valeur reçue dans <code>plaintext</code> est encodée en Base 64 et doit être traitée comme étant le contenu d'un fichier.</li>
+	  </ul>
+
+	  <div class="bs-example">
+	    <p>Exemple de requête de réponse renvoyée par Core Secret.</p>
+	    <pre>csclient://x-callback-url/IACRequestResponse?&amp;IACRequestID=93C69763-5F10-409B-AD35-ADC4310ED3E6&amp;IACResponseType=0&amp;description=Exemple&amp;plaintext=&lt;message secret&gt;</pre>
+	  </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="bs-footer" role="contentinfo">
+      <div class="container">
+      </div>
+    </footer>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/documentation.js"></script>
+  </body>
+</html>

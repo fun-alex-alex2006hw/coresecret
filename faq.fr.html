@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="iso-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Core Secret - FAQ</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/index.fr.html" class="navbar-brand">Core Secret</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="documentation.fr.html">Documentation</a>
+            </li>
+            <li class="active">
+              <a href="faq.fr.html">FAQ</a>
+            </li>
+            <li>
+              <a href="contact.fr.html">Contact</a>
+            </li>
+	    <li>
+              <a href="faq.en.html">English <img src="images/uk.png" width="15" class="flag" alt="flag" /></a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+	<h1>Questions Fréquentes</h1>
+
+	<h3 id="compat-devices">Q : Quelle est la liste des appareils iOS compatibles?</h3>
+	<p>Pour pouvoir fonctionner avec Core Secret les appareils doivent posséder le Bluetooth 4.0. Les périphériques actuellement compatibles sont :</p>
+
+	<ul>
+	  <li>Tous les iPhone à partir du iPhone 4S</li>
+	  <li>Tous les iPad à partir du iPad 3ème génération, incluant l'iPad Air</li>
+	  <li>Tous les iPad mini</li>
+	  <li>Le iPod touch 5ème génération</li>
+	</ul>
+
+	<h4>Compatibilité Airdrop</h4>
+	<p>Par ailleurs certains modéles compatibles Bluetooth 4.0 ne sont pas pourvus de la fonctionnalité Airdrop introduite dans iOS 7. Dans ce cas certaines <a href="documentation.fr.html#group-airdrop">fonctionnalités de partage</a> de Core Secret utilisant Airdrop seront indisponibles. Les appareils n'ayant pas Airdrop sont le iPad 3ème génération et le iPhone 4S. Pour tous les autres appareils Airdrop est disponible à condition d'avoir activé un compte iCloud.</p>
+
+
+	<h3 id="compat-ios">Q : Quelles versions de iOS sont supportées?</h3>
+
+	<p>Actuellement Core Secret nécessite l'installation de iOS 7 et n'est pas compatible avec les versions précédentes.</p>
+
+
+	<h3 id="source-code">Q: Le code source de Core Secret est-il disponible?</h3>
+
+	<p>Actuellement, seulement le code crypto. Tout le code crypto est disponible sous la forme du projet open source <a href="https://github.com/seb-m/CryptoPill">CryptoPill</a>.</p>
+
+
+	<h3 id="btle-fail">Q : Que faire si le partage ou la reconstitution de secret échoue à cause de la connexion Bluetooth 4.0?</h3>
+
+	<ol>
+	  <li>Dans un premier temps réassayez une nouvelle fois de partager/reconstituer le secret en revenant dans le menu précédent puis en recommençant.</li>
+	  <li>Si çà ne fonctionne toujours pas, essayez de relancer l'application, ou essayez de désactiver le Bluetooth puis de le réactiver, ou finalement de redémarrer complétement l'appareil.</li>
+	  <li>Dans le cas extrême où çà ne fonctionnerai toujours pas vous pouvez tenter de réinitialiser les réglages réseau de votre appareil : <code>Réglages > Général > Réinitialiser > Réinitialiser les réglages réseau</code>. <span class="glyphicon glyphicon-warning-sign"></span> <strong>Attention!</strong> cette manipulation entrainera la perte de tous vos réglages réseau, par conséquent à utiliser seulement en connaissance de cause et avec prudence.</li>
+	</ol>
+
+
+	<h3 id="btle-bg">Q : Core Secret n'est pas capable de recevoir de requêtes après avoir redémarré l'appareil?</h3>
+	<p>Core Secret utilise un mode d'exécution spécial pour pouvoir traiter les requêtes Bluetooth 4.0 reçues lorsque l'application est en arrière plan. Toutefois, quand un appareil est redémarré les applications utilisant ce mode ne sont pas automatiquement redémarrées par iOS et donc toutes les requêtes reçues échoueront. C'est une limitation actuelle de iOS, la seule manière de contourner ce problème et de redémarrer manuellement Core Secret après le redémarrage de l'appareil. Ainsi le mode d'exécution en arrière plan sera réactivé.</p>
+
+
+	<h3 id="backup">Q : Comment sauvegarder ou restaurer les secrets?</h3>
+
+	<p>Il n'est pas possible de restaurer les secrets de manière automatique sur un nouvel appareil. Cette question est traitée dans les sections suivantes de la documentation : <a href="documentation.fr.html#secret-sharing-backup">Restauration des secrets</a>, <a href="documentation.fr.html#secret-sharing-reshare-btle">Repartage de secret</a> et <a href="documentation.fr.html#group-rebind">Dupliquer un chiffré</a>.</p>
+
+
+	<h3 id="max-peers">Q : Avec combien de pairs est-il possible de partager un secret?</h3>
+
+	<p>Actuellement l'application a été testée entre 4 pairs, le protocole pourrait en supporter 254 mais la limitation est sans doute bien inférieure et dépend vraissemblablement du nombre de connexions Bluetooth 4.0 simultanées possibles, a priori aux alentours de 10 voir moins si le signal se dégrade. Cette section pourra être mise à jour lorsque j'aurai plus d'informations sur le sujet.</p>
+
+
+	<h3 id="server">Q : Quelles données sont envoyées sur le serveur de Core Secret, sur iCloud, ou sur un autre serveur sur internet?</h3>
+
+	<p><strong>Aucunes.</strong> Core Secret n'a pas de serveur; n'utilise pas iCloud pour sauvegarder quoi que ce soit et n'envoit aucune donnée sur internet vers un quelconque autre serveur. L'application ne partage les secrets qu'avec les pairs sélectionnés lors des partages de secrets. Si besoin est, il est même possible d'utiliser Core Secret uniquement avec le Bluetooth 4.0 activé, voir <a href="documentation.fr.html#settings-btle">cette section</a> pour plus d'informations sur un scénario d'utilisation dérivé de cette idée. Par ailleurs Core Secret n'utilise aucune librairie pour analyser les usages de l'utilisateur, ni aucune librairie pour envoyer des rapports de bugs lorsque l'application <em>crash</em>.</p>
+      </div>
+    </div>
+
+    <footer class="bs-footer" role="contentinfo">
+      <div class="container">
+      </div>
+    </footer>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

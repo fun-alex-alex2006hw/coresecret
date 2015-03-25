@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Core Secret - Quick Tutorial</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/index.en.html" class="navbar-brand">Core Secret</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="tutorial.en.html">Tutorial</a>
+            </li>
+            <li>
+              <a href="documentation.en.html">Documentation</a>
+            </li>
+            <li>
+              <a href="faq.en.html">FAQ</a>
+            </li>
+            <li>
+              <a href="contact.en.html">Contact</a>
+            </li>
+	    <li>
+              <a href="faq.fr.html">French <img src="images/fr.png" width="15" class="flag" alt="flag" /></a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+	<h1>Quick Tutorial</h1>
+
+	<p>Follow these steps to quickly discover the main functionalities of Core Secret and share secrets between your devices or with other peers by using <a href="http://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir's secret sharing scheme</a>. Alternatively if you want to learn more details about Core Secret also check out the <a href="documentation.en.html">full documentation</a>.</p>
+
+
+	<h3 id="peers">Authenticate peers</h3>
+	<p>Before sharing a secret you must first import the public key of each one of the peers you want to send a share. To import a public key, just scan its corresponding QR code. Once imported you may share as many secrets as you want with this peer.</p>
+
+	<p>Your peer, say Alice, must present her public key, thus she goes in <code>Menu (top left icon) &rarr; Manage Peers &rarr; Me</code></p>
+
+	<div class="bs-example">
+	  <div class="row">
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/peers1.png" class="thumbnail">
+		  <img src="images/en/peers1.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/peers2.png" class="thumbnail">
+		  <img src="images/en/peers2.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/peers3.png" class="thumbnail">
+		  <img src="images/en/peers3.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<P>You then must scan her QR code from your device, so just go to <code>Menu &rarr; Scan QR Code</code>. And finally authorize her key. You also can check that the key you imported is the same on both devices by either comparing their hexadecimal values, their <em>ascii-art</em> visual representations or their <em>Bubble Babble</em> strings.</p>
+
+	<div class="bs-example">
+	  <div class="row">
+	    <div class="col-sm-6 col-md-4 col-md-offset-2">
+	      <div class="thumbnail">
+		<a href="images/en/peers4.png" class="thumbnail">
+		  <img src="images/en/peers4.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/peers5.png" class="thumbnail">
+		  <img src="images/en/peers5.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<p>Conversely, don't forget that each one of your recipient peers will also need to import your public key before accepting any share. Thus make them scan your QR code by following the same method.</p>
+
+
+	<h3 id="secret-sharing">Bluetooth LE secret sharing</h3>
+	<h4>Sharing</h4>
+	<p>Now you're ready to share secrets with your peers located at your proximity and also running Core Secret. A secret is divided in shares, shares are distributed among selected peers, each peer with a share may request additional shares of this secret and may provide its share to requesting peers. For each secret a fixed number of shares must be collected and reassembled in order to recover the original secret value otherwise the secret value remains unavailable. From the main menu <code>press '+' (top right)</code> and follow these steps to share a secret with your selected peers:</p>
+
+	<div class="bs-example">
+	  <div class="row">
+	    <div class="col-sm-6 col-md-4 col-md-offset-2">
+	      <div class="thumbnail">
+		<a href="images/en/fshare1.png" class="thumbnail">
+		  <img src="images/en/fshare1.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/fshare2.png" class="thumbnail">
+		  <img src="images/en/fshare2.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="col-sm-6 col-md-4 col-md-offset-2">
+	      <div class="thumbnail">
+		<a href="images/en/fshare3.png" class="thumbnail">
+		  <img src="images/en/fshare3.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/fshare4.png" class="thumbnail">
+		  <img src="images/en/fshare4.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<ol>
+	  <li>The description field is optional and may serve as metadata, for instance you may use it to describe what this secret is corresponding to without having to decrypt it. However as this data is not encrypted you might want to not write something too specific or even not providing any value at all.</li>
+	  <li>Provide a password if you additionnally want to protect your secret with a strong password, note that in this case it doesn't disable the secret sharing scheme, it's just another layer of security on top of it.</li>
+	  <li>Select your type of secret.</li>
+	  <li>Select a threshold value to guaranty your secret won't be decrypted by a peer until it himself collects a threshold number of shares from other peers.</li>
+	  <li>By default shares are named with labels provided by their peers, if you want more anonymous shares disable this option. This option is enabled by default because it could be useful to give you an hint of who are the co-holders of a secret you need to collect shares from before trying to recover it.</li>
+	  <li>Eventually select the peers you want to send a share of your secret and who will also be able to reassemble, access and reshare this secret.</li>
+	</ol>
+
+	<h4>Recovering</h4>
+
+	<p>Reassembling a secret from shares is even easier, simply select a secret and it will automatically search for shares by looking at every devices near of you. Of course it implies you only can recover a secret if the number of peers required to recover the secret is available at your proximity. Once your device has collected all the shares needed it will decrypt the corresponding secret and present it to you.</p>
+
+	<div class="bs-example">
+	  <div class="row">
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/frecover1png" class="thumbnail">
+		  <img src="images/en/frecover1.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/frecover2.png" class="thumbnail">
+		  <img src="images/en/frecover2.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-4">
+	      <div class="thumbnail">
+		<a href="images/en/frecover3.png" class="thumbnail">
+		  <img src="images/en/frecover3.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+	<h3 id="shared-encrypyion-key">Shared encryption key</h3>
+	<p>Because Bluetooth LE is not designed to send large quantities of data, the previous mode is limited to sending chunk of encrypted data no larger than 100kB. Of course it wouldn't be really super useful if it wasn't possible to share bigger files such as photos or rich text files. Therefore Core Secret provides a second mode to handle these kinds of needs.</p>
+
+	<p>With this mode, the goal is to create and share by using the previous mechanism an encryption key that will then be used to encrypt your data. For instance a peer will be able to encrypt and send a photo to another peer also possessing a share of this encryption key simply by sending him this data through Airdrop or by mailing him the cyphertext. This peer will then have to reassemble the encryption key to decrypt the photo and import it on his device.</p>
+
+	<p>First create an <em>Encryption Key</em> named <em>Photos</em>, then recover this secret key and add a new photo named <em>photo 1</em> to it.</p>
+
+	<div class="bs-example">
+	  <div class="row">
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey1.png" class="thumbnail">
+		  <img src="images/en/enckey1.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey2.png" class="thumbnail">
+		  <img src="images/en/enckey2.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey3.png" class="thumbnail">
+		  <img src="images/en/enckey3.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey4.png" class="thumbnail">
+		  <img src="images/en/enckey4.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey5.png" class="thumbnail">
+		  <img src="images/en/enckey5.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey6.png" class="thumbnail">
+		  <img src="images/en/enckey6.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey7.png" class="thumbnail">
+		  <img src="images/en/enckey7.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	    <div class="col-sm-6 col-md-3">
+	      <div class="thumbnail">
+		<a href="images/en/enckey8.png" class="thumbnail">
+		  <img src="images/en/enckey8.png" alt="">
+		</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<p>Now you know the basics you're ready to discover Core Secret by yourself or at your convenience read the <a href="documentation.en.html">full documentation</a> for even more details.</p>
+      </div>
+    </div>
+
+    <footer class="bs-footer" role="contentinfo">
+      <div class="container">
+      </div>
+    </footer>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
